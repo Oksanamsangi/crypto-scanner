@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                    String             @id @default(cuid())
+  email                 String             @unique
+  passwordHash          String
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  subscriptionExpiresAt DateTime?
+  subscriptionPlan      SubscriptionPlan   @default(FREE)
+  subscriptionStatus    SubscriptionStatus @default(ACTIVE)
+  dailyScanCount        Int                @default(0)
+  dailyScanDate         DateTime?
+  subscriptions         Subscription[]
+}
+
+
+model Subscription {
+  id                    String             @id @default(cuid())
+  userId                String
+  provider              String
+  providerCustomerId    String?
+  providerSubscriptionId String?            @unique
+  plan                  SubscriptionPlan
+  status                SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  cancelAtPeriodEnd     Boolean            @default(false)
+  canceledAt            DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([providerCustomerId])
+  @@index([status])
+}
+
+model SetupMemory {
+  id                String    @id @default(cuid())
+  symbol            String
+  interval          String
+  direction         String
+  trend             String
+  momentum          String
+  volatility        String
+  volume            String
+  confidence        Int
+  signalStrength    Int
+  score             Int
+  rsi               Float?
+  atr               Float?
+  emaStructure      String
+  priceVsEma        String
+  changePercent     Float?
+  volumeRatio       Float?
+  setupQuality      Int?
+  contextConfidence Int?
+  marketRegime      String?
+  marketPhase       String?
+  breadthScore      Float?
+  crossMarketScore  Float?
+  fingerprint       String
+  characteristics   Json
+  observedAt        DateTime  @default(now())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  outcomeStatus     String?
+  outcomeReturn     Float?
+  outcomeAt         DateTime?
+
+  @@index([symbol, interval, observedAt])
+  @@index([direction, interval, observedAt])
+  @@index([fingerprint])
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}

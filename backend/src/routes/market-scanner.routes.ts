@@ -1,5 +1,7 @@
 import { Router } from "express";
-import type { Request, Response } from "express";
+import type { Response } from "express";
+import { authMiddleware, type AuthRequest } from "../middleware/auth.middleware.js";
+import { subscriptionMiddleware, requirePro } from "../middleware/subscription.middleware.js";
 
 import { MarketScannerService } from "../services/market-scanner.service.js";
 import type { KlineInterval } from "../types/market.js";
@@ -33,7 +35,12 @@ function isValidInterval(value: string): value is KlineInterval {
   return (VALID_INTERVALS as readonly string[]).includes(value);
 }
 
-router.get("/", async (req: Request, res: Response) => {
+router.get(
+  "/",
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  async (req: AuthRequest, res: Response) => {
   const intervalParam =
     typeof req.query.interval === "string"
       ? req.query.interval
@@ -74,6 +81,7 @@ router.get("/", async (req: Request, res: Response) => {
       error: "Market scanner failed",
     });
   }
-});
+  },
+);
 
 export default router;

@@ -1,6 +1,9 @@
 
 import { Router } from "express";
-import type { Request, Response } from "express";
+import { authMiddleware, type AuthRequest } from "../middleware/auth.middleware.js";
+import { subscriptionMiddleware } from "../middleware/subscription.middleware.js";
+import { requirePro } from "../middleware/pro.middleware.js";
+import type { Response } from "express";
 
 import { BinanceService } from "../services/binance.service.js";
 import { MultiBacktestService } from "../services/multi-backtest.service.js";
@@ -33,7 +36,13 @@ const DEFAULT_CONFIDENCE_LEVELS = [
 
 router.get(
   "/multi-backtest",
-  async (req: Request, res: Response) => {
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  async (req: AuthRequest, res: Response) => {
     try {
       const interval =
         typeof req.query.interval === "string"

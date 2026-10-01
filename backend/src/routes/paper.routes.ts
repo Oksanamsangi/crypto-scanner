@@ -1,6 +1,9 @@
 
 import { Router } from 'express';
-import type { Request, Response } from 'express';
+import type { Response } from "express";
+import { authMiddleware, type AuthRequest } from "../middleware/auth.middleware.js";
+import { subscriptionMiddleware } from "../middleware/subscription.middleware.js";
+import { requirePro } from "../middleware/pro.middleware.js";
 import {
   BinanceService,
   BinanceServiceError,
@@ -70,8 +73,17 @@ function handleRouteError(
 }
 
 router.get(
-  '/:symbol',
-  async (req: Request, res: Response) => {
+  "/:symbol",
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  async (req: AuthRequest, res: Response) => {
     const { symbol } = req.params;
 
     if (

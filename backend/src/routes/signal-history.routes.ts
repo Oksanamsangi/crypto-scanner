@@ -1,5 +1,15 @@
 import { Router } from "express";
-import type { Request, Response } from "express";
+import type { Response } from "express";
+
+import {
+  authMiddleware,
+  type AuthRequest,
+} from "../middleware/auth.middleware.js";
+
+import {
+  subscriptionMiddleware,
+  requirePro,
+} from "../middleware/subscription.middleware.js";
 
 import { SignalHistoryService } from "../services/signal-history.service.js";
 
@@ -7,74 +17,101 @@ const router = Router();
 
 export const signalHistoryService = new SignalHistoryService();
 
-router.get("/", (req: Request, res: Response) => {
-  const symbol =
-    typeof req.query.symbol === "string"
-      ? req.query.symbol
-      : undefined;
+const FREE_HISTORY_LIMIT = 20;
+const PRO_HISTORY_LIMIT = 500;
 
-  const timeframe =
-    typeof req.query.timeframe === "string"
-      ? req.query.timeframe
-      : undefined;
+router.get(
+  "/",
+  authMiddleware,
+  subscriptionMiddleware,
+  (req: AuthRequest, res: Response) => {
+    const symbol =
+      typeof req.query.symbol === "string"
+        ? req.query.symbol
+        : undefined;
 
-  const signal =
-    req.query.signal === "BUY" || req.query.signal === "SELL"
-      ? req.query.signal
-      : undefined;
+    const timeframe =
+      typeof req.query.timeframe === "string"
+        ? req.query.timeframe
+        : undefined;
 
-  const requestedLimit =
-    typeof req.query.limit === "string"
-      ? Number(req.query.limit)
-      : 100;
+    const signal =
+      req.query.signal === "BUY" || req.query.signal === "SELL"
+        ? req.query.signal
+        : undefined;
 
-  const limit =
-    Number.isInteger(requestedLimit) &&
-    requestedLimit >= 1 &&
-    requestedLimit <= 500
-      ? requestedLimit
-      : 100;
+    const requestedLimit =
+      typeof req.query.limit === "string"
+        ? Number(req.query.limit)
+        : undefined;
 
-  const historyOptions: {
-    symbol?: string;
-    timeframe?: string;
-    signal?: "BUY" | "SELL";
-    limit?: number;
-  } = {
-    limit,
-  };
+    const maxLimit =
+      req.subscriptionPlan === "PRO"
+        ? PRO_HISTORY_LIMIT
+        : FREE_HISTORY_LIMIT;
 
-  if (symbol !== undefined) {
-    historyOptions.symbol = symbol;
-  }
+    const limit =
+      requestedLimit !== undefined &&
+      Number.isInteger(requestedLimit) &&
+      requestedLimit >= 1
+        ? Math.min(requestedLimit, maxLimit)
+        : Math.min(100, maxLimit);
 
-  if (timeframe !== undefined) {
-    historyOptions.timeframe = timeframe;
-  }
+    const historyOptions: {
+      symbol?: string;
+      timeframe?: string;
+      signal?: "BUY" | "SELL";
+      limit?: number;
+    } = {
+      limit,
+    };
 
-  if (signal !== undefined) {
-    historyOptions.signal = signal;
-  }
+    if (symbol !== undefined) {
+      historyOptions.symbol = symbol;
+    }
 
-  const history = signalHistoryService.getHistory(historyOptions);
+    if (timeframe !== undefined) {
+      historyOptions.timeframe = timeframe;
+    }
 
-  res.json({
-    count: history.length,
-    history,
-  });
-});
+    if (signal !== undefined) {
+      historyOptions.signal = signal;
+    }
 
-router.get("/stats", (_req: Request, res: Response) => {
-  res.json(signalHistoryService.getStats());
-});
+    const history = signalHistoryService.getHistory(historyOptions);
 
-router.delete("/", (_req: Request, res: Response) => {
-  signalHistoryService.clear();
+    res.json({
+      count: history.length,
+      history,
+      plan: req.subscriptionPlan,
+      limit: maxLimit,
+    });
+  },
+);
 
-  res.json({
-    status: "ok",
-    message: "Signal history cleared.",
-  });
-});
+router.get(
+  "/stats",
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  (_req: AuthRequest, res: Response) => {
+    res.json(signalHistoryService.getStats());
+  },
+);
+
+router.delete(
+  "/",
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  (_req: AuthRequest, res: Response) => {
+    signalHistoryService.clear();
+
+    res.json({
+      status: "ok",
+      message: "Signal history cleared.",
+    });
+  },
+);
 
 export default router;

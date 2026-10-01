@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 
@@ -6,11 +7,21 @@ import marketScannerRouter from "./routes/market-scanner.routes.js";
 import backtestRouter from "./routes/backtest.routes.js";
 import multiBacktestRouter from "./routes/multi-backtest.routes.js";
 import signalHistoryRouter from "./routes/signal-history.routes.js";
+import authRouter from "./routes/auth.routes.js";
+import subscriptionRouter from "./routes/subscription.routes.js";
+import intelligenceRouter from "./intellegence/intelligence.routes.js";
+import aiRouter from "./routes/ai.routes.js";
+import aiPipelineRouter from "./routes/ai-pipeline.routes.js";
+import aiIntelligenceRouter from "./routes/ai-intelligence.routes.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/intelligence", intelligenceRouter);
+app.use("/api/ai", aiRouter);
+app.use("/api/ai-pipeline", aiPipelineRouter);
+app.use("/api/ai-intelligence", aiIntelligenceRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({
@@ -28,6 +39,11 @@ app.use("/api/backtest", backtestRouter);
 app.use("/api", multiBacktestRouter);
 
 app.use("/api/signal-history", signalHistoryRouter);
+app.use("/api/subscription", subscriptionRouter);
+app.use("/api/auth", authRouter);
+app.get("/api/auth-test", (_req, res) => {
+  res.json({ auth: "loaded" });
+});
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 

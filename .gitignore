@@ -7,3 +7,15 @@ dist/
 *.tsbuildinfo
 .DS_Store
 .vscode/
+
+# Local AI/editor tooling
+backend/.agents/
+backend/.claude/
+backend/.windsurf/
+
+# Local development artifacts
+backend/src/services/*.backup
+backend/src/test-*.ts
+
+backend/prisma/*.backup
+frontend/src/LiveChart.tsx

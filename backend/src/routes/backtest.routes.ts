@@ -1,6 +1,9 @@
 
 import { Router } from "express";
-import type { Request, Response } from "express";
+import { authMiddleware, type AuthRequest } from "../middleware/auth.middleware.js";
+import { subscriptionMiddleware } from "../middleware/subscription.middleware.js";
+import { requirePro } from "../middleware/pro.middleware.js";
+import type { Response } from "express";
 import { BinanceService, BinanceServiceError } from "../services/binance.service.js";
 import { BacktestService } from "../services/backtest.service.js";
 import type { KlineInterval } from "../types/market.js";
@@ -88,7 +91,16 @@ function handleRouteError(
  */
 router.get(
   "/:symbol",
-  async (req: Request, res: Response) => {
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  authMiddleware,
+  subscriptionMiddleware,
+  requirePro,
+  async (req: AuthRequest, res: Response) => {
     const { symbol } = req.params;
 
     if (
