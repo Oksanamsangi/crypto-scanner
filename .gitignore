@@ -19,3 +19,5 @@ backend/src/test-*.ts
 
 backend/prisma/*.backup
 frontend/src/LiveChart.tsx
+.vercel
+.env*
