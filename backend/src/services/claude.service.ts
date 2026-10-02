@@ -1,20 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 export class ClaudeService {
-  private readonly client: Anthropic;
+  private readonly client: Anthropic | null;
 
   constructor() {
     const apiKey = process.env.ANTHROPIC_API_KEY;
-
-    if (!apiKey) {
-      throw new Error(
-        "ANTHROPIC_API_KEY is not configured.",
-      );
-    }
-
-    this.client = new Anthropic({
-      apiKey,
-    });
+    this.client = apiKey ? new Anthropic({ apiKey }) : null;
   }
 
   async generateText(
@@ -22,6 +13,12 @@ export class ClaudeService {
     prompt: string,
     maxTokens = 1200,
   ): Promise<string> {
+    if (!this.client) {
+      throw new Error(
+        "AI provider is not configured.",
+      );
+    }
+
     const response =
       await this.client.messages.create({
         model: "claude-sonnet-4-6",
