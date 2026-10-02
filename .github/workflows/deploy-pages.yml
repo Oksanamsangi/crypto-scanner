@@ -36,6 +36,8 @@ jobs:
 
       - name: Build
         working-directory: frontend
+        env:
+          VITE_API_URL: https://crypto-scanner-gamma.vercel.app
         run: npm run build
 
       - name: Setup Pages
