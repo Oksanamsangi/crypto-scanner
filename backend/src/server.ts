@@ -45,8 +45,12 @@ app.get("/api/auth-test", (_req, res) => {
   res.json({ auth: "loaded" });
 });
 
+export default app;
+
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
