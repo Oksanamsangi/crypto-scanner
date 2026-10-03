@@ -246,6 +246,7 @@ export default function AIIntelligencePanel({
 
   return (
     <section
+      className="ai-intelligence-section"
       style={{
         marginTop: 20,
         display: "flex",

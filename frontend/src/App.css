@@ -3218,3 +3218,247 @@ button:disabled {
     align-items: flex-start;
   }
 }
+
+
+/* =========================================================
+   VELORA — DEEP VIOLET / SELECTIVE LED SYSTEM
+   ========================================================= */
+
+:root {
+  --bg: #050509;
+  --bg-soft: #08080d;
+  --panel: #0b0b11;
+  --panel-2: #0f0f17;
+
+  --line: rgba(178, 151, 255, 0.075);
+  --line-strong: rgba(178, 151, 255, 0.14);
+
+  --text: #f2f0f7;
+  --muted: #85808f;
+  --muted-2: #5c5866;
+
+  --purple: #7357c7;
+  --purple-light: #9b82ef;
+  --purple-dark: #392568;
+
+  --violet-led: #8d6cff;
+  --violet-glow: rgba(115, 87, 199, 0.20);
+  --violet-glow-strong: rgba(141, 108, 255, 0.34);
+
+  --green: #35d07f;
+  --red: #ff5c7a;
+  --amber: #d9a441;
+}
+
+html,
+body {
+  background: var(--bg);
+}
+
+body {
+  background:
+    radial-gradient(
+      ellipse 70% 45% at 75% -12%,
+      rgba(62, 40, 126, 0.12),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 45% 35% at 5% 100%,
+      rgba(42, 27, 88, 0.07),
+      transparent 70%
+    ),
+    var(--bg);
+}
+
+/* Ambient light — deliberately restrained */
+.ambient {
+  opacity: 0.055;
+  filter: blur(150px);
+}
+
+.ambient-one {
+  background: #51359b;
+}
+
+.ambient-two {
+  background: #28175c;
+}
+
+/* Top navigation */
+.topbar {
+  background: rgba(5, 5, 9, 0.91);
+  border-bottom-color: rgba(141, 108, 255, 0.075);
+}
+
+/* Brand LED */
+.brand-mark span {
+  background: var(--violet-led);
+  box-shadow:
+    0 0 7px rgba(141, 108, 255, 0.45),
+    0 0 18px rgba(115, 87, 199, 0.18);
+}
+
+/* Generic interactive violet treatment */
+button:hover:not(:disabled) {
+  border-color: rgba(141, 108, 255, 0.35);
+  box-shadow: 0 0 18px rgba(115, 87, 199, 0.10);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 1px solid rgba(141, 108, 255, 0.55);
+  outline-offset: 2px;
+  box-shadow: 0 0 16px rgba(115, 87, 199, 0.12);
+}
+
+/* =========================================================
+   AI ANALYST — PREMIUM INTELLIGENCE PANEL
+   ========================================================= */
+
+.ai-intelligence-section {
+  position: relative !important;
+  width: 100% !important;
+  padding: 28px !important;
+  gap: 14px !important;
+
+  border: 1px solid rgba(141, 108, 255, 0.13) !important;
+  border-radius: 16px !important;
+
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      rgba(115, 87, 199, 0.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(16, 14, 24, 0.98),
+      rgba(8, 8, 13, 0.98)
+    ) !important;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 0 38px rgba(83, 55, 156, 0.07) !important;
+}
+
+.ai-intelligence-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(141, 108, 255, 0.045) 42%,
+      transparent 68%
+    );
+}
+
+/* Header */
+.ai-intelligence-section > div:first-child {
+  position: relative !important;
+  z-index: 1;
+  padding-bottom: 18px !important;
+  border-bottom: 1px solid rgba(141, 108, 255, 0.09) !important;
+}
+
+.ai-intelligence-section > div:first-child > div:first-child > div:first-child {
+  color: #9b82ef !important;
+  opacity: 0.82 !important;
+  text-shadow: 0 0 12px rgba(141, 108, 255, 0.18);
+}
+
+.ai-intelligence-section > div:first-child > div:first-child > div:nth-child(2) {
+  letter-spacing: 0.02em !important;
+}
+
+.ai-intelligence-section > div:first-child > div:first-child > div:nth-child(3) {
+  color: #777281 !important;
+}
+
+/* Final action badge — LED edge, not neon block */
+.ai-intelligence-section > div:first-child > div:last-child {
+  border-radius: 8px !important;
+  background: rgba(115, 87, 199, 0.055) !important;
+  box-shadow:
+    0 0 22px rgba(115, 87, 199, 0.08),
+    inset 0 0 18px rgba(115, 87, 199, 0.035);
+}
+
+/* Final assessment */
+.ai-intelligence-section > div:nth-child(2) {
+  position: relative !important;
+  z-index: 1;
+  padding: 20px 22px !important;
+  border-radius: 10px !important;
+  border-color: rgba(141, 108, 255, 0.18) !important;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(115, 87, 199, 0.075),
+      rgba(255, 255, 255, 0.012)
+    ) !important;
+
+  box-shadow:
+    inset 2px 0 0 rgba(141, 108, 255, 0.55),
+    0 0 25px rgba(115, 87, 199, 0.045);
+}
+
+/* Metric cards */
+.ai-intelligence-section > div:nth-child(3) > div {
+  border-radius: 9px !important;
+  border-color: rgba(141, 108, 255, 0.085) !important;
+  background: rgba(255, 255, 255, 0.018) !important;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease !important;
+}
+
+.ai-intelligence-section > div:nth-child(3) > div:hover {
+  transform: translateY(-1px);
+  border-color: rgba(141, 108, 255, 0.20) !important;
+  box-shadow: 0 0 20px rgba(115, 87, 199, 0.07);
+}
+
+/* All analytical sections */
+.ai-intelligence-section > div:not(:first-child):not(:nth-child(2)):not(:nth-child(3)) {
+  border-radius: 10px !important;
+  border-color: rgba(141, 108, 255, 0.075) !important;
+  background: rgba(255, 255, 255, 0.014) !important;
+}
+
+/* Bull / Bear retain semantic colors */
+.ai-intelligence-section > div:nth-child(6) > div:first-child {
+  border-color: rgba(53, 208, 127, 0.20) !important;
+  background: rgba(53, 208, 127, 0.025) !important;
+}
+
+.ai-intelligence-section > div:nth-child(6) > div:last-child {
+  border-color: rgba(255, 92, 122, 0.20) !important;
+  background: rgba(255, 92, 122, 0.025) !important;
+}
+
+/* Section headings */
+.ai-intelligence-section > div > div > div:first-child {
+  letter-spacing: 0.12em !important;
+}
+
+/* Soft violet divider at the bottom */
+.ai-intelligence-section > div:last-child {
+  border-top-color: rgba(141, 108, 255, 0.07) !important;
+  color: #777281 !important;
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  .ai-intelligence-section {
+    padding: 20px 16px !important;
+    border-radius: 12px !important;
+  }
+}
