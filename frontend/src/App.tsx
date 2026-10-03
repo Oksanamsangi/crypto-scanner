@@ -877,7 +877,11 @@ const marketConfidence =
             <div className="error-icon">!</div>
 
             <div>
-              <strong>SCANNER CONNECTION ERROR</strong>
+              <strong>
+                {error.startsWith("Daily free scan limit reached")
+                  ? "DAILY SCAN LIMIT REACHED"
+                  : "SCANNER CONNECTION ERROR"}
+              </strong>
               <p>{error}</p>
             </div>
 
