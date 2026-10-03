@@ -8,7 +8,7 @@ import type {
   Ticker24h,
 } from "../types/market.js";
 
-const BINANCE_BASE_URL = "https://api.binance.com";
+const BINANCE_BASE_URL = "https://data-api.binance.vision";
 const REQUEST_TIMEOUT_MS = 10_000;
 
 interface RawTicker24h {

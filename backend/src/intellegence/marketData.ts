@@ -6,7 +6,7 @@ import type {
 } from "./types.js";
 
 const BINANCE_API =
-  "https://api.binance.com/api/v3/klines";
+  "https://data-api.binance.vision/api/v3/klines";
 
 const ATR_PERIOD = 14;
 const VOLUME_PERIOD = 30;
